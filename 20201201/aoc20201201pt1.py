@@ -7,8 +7,6 @@ expenseReport = open("expense_report", "r")
 expenses = []
 address1 = 0
 address2 = 1
-expenseSum = 0
-expenseMultiply = 0
 
 # Load expenses in array
 for expense in expenseReport:
