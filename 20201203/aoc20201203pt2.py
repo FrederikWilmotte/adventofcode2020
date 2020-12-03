@@ -5,33 +5,25 @@
 
 import math
 
+forest = open("toboggan_forest", "r")
 
-def checkTree(rowTree, realPosition):
-    rowLength = len(rowTree)
-    rowPosition = calculatePosition(realPosition, rowLength)
-    if rowTree[rowPosition - 1:rowPosition] == "#":
+def checkTree(rowTree, position):
+    rowPosition = position % len(rowTree)
+    if rowTree[rowPosition:rowPosition+1] == "#":
         return True
 
-
-def calculatePosition(realPosition, rowLength):
-    rowPosition = realPosition
-    while rowPosition > rowLength:
-        rowPosition -= rowLength
-    return rowPosition
-
-
 def countTrees(right, down):
-    forest = open("toboggan_forest", "r")
-    positionNumber = 1
-    rowNumber = 1
+    forest.seek(0)
+    position = 0
+    row = 1
     nrTrees = 0
     for rowTree in forest:
         rowTree = rowTree.rstrip("\n")
-        if (rowNumber == 1) or ((rowNumber - 1) % down == 0):
-            if checkTree(rowTree, positionNumber):
+        if (row == 1) or ((row - 1) % down == 0):
+            if checkTree(rowTree, position):
                 nrTrees += 1
-            positionNumber += right
-        rowNumber += 1
+            position += right
+        row += 1
     return nrTrees
 
 
