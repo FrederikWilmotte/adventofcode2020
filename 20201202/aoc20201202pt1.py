@@ -4,8 +4,6 @@
 # --- Part One ---
 
 passwordList = open("password_list", "r")
-passwordLines = []
-
 
 # Process Password line
 def splitPasswordLine(passwordLine):

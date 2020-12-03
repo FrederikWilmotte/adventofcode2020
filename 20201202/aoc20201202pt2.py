@@ -4,7 +4,6 @@
 # --- Part Two ---
 
 passwordList = open("password_list", "r")
-passwordLines = []
 
 
 # Process Password line
