@@ -5,25 +5,26 @@
 
 batch = open("passport_batch", "r")
 
-requiredFields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
-
-def checkPassportFields(batchline, fields):
-    returnedFields = fields.copy()
-    for field in fields:
-        if field in batchLine:
-            returnedFields.remove(field)
-    return returnedFields
+def checkPassportFields(passport):
+    passportFields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
+    checkedFields = passportFields.copy()
+    for field in passportFields:
+        if field in passport:
+            checkedFields.remove(field)
+    if not checkedFields:
+        return True
 
 validPassports = 0
-checkedFields = requiredFields.copy()
+passport = ""
 for batchLine in batch:
     if batchLine != "\n":
-        checkedFields = checkPassportFields(batchLine, checkedFields)
+        batchLine = batchLine.rstrip("\n")
+        passport = passport + " " + batchLine
     else:
-        if not checkedFields:
+        if checkPassportFields(passport):
             validPassports += 1
-        checkedFields = requiredFields.copy()
-if not checkedFields:
+        passport = ""
+if checkPassportFields(passport):
     validPassports += 1
 
 print("Valid Passports", validPassports)

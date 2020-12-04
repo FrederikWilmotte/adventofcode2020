@@ -121,4 +121,4 @@ def pidCheck(passValue):
     if len(passValue) == 9 and passValue.isdigit():
         return True
 
-print(count_valid_passports("passport_batch"))
+print(count_valid_passports("../passport_batch"))
