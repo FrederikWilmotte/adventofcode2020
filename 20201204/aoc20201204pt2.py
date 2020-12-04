@@ -18,28 +18,28 @@ def splitPassEntry(passEntry):
 
 
 def byrCheck(passValue):
-    if passValue >= "1920" and passValue <= "2002":
+    if "1920" <= passValue <= "2002":
         return True
 
 
 def iyrCheck(passValue):
-    if passValue >= "2010" and passValue <= "2020":
+    if "2010" <= passValue <= "2020":
         return True
 
 
 def eyrCheck(passValue):
-    if passValue >= "2020" and passValue <= "2030":
+    if "2020" <= passValue <= "2030":
         return True
 
 
 def hgtCheck(passValue):
     if passValue[-2:] == "cm":
         if len(passValue) == 5 and passValue[:3].isdigit():
-            if passValue[:3] >= "150" and passValue[:3] <= "193":
+            if "150" <= passValue[:3] <= "193":
                 return True
     elif passValue[-2:] == "in":
         if len(passValue) == 4 and passValue[:2].isdigit():
-            if passValue[:2] >= "59" and passValue[:2] <= "76":
+            if "59" <= passValue[:2] <= "76":
                 return True
 
 
