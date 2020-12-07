@@ -19,16 +19,13 @@ def group_count(answers):
 def plane_count(answerList):
     answer_list = open(answerList, "r")
     answer = ""
-    nrAnswer = 0
     sumOfCounts = 0
     for answerLine in answer_list:
         if answerLine != "\n":
             answerLine = answerLine.rstrip("\n")
             answer = answer + " " + answerLine
-            nrAnswer += 1
         else:
             sumOfCounts += group_count(answer)
             answer = ""
-            nrAnswer = 0
     sumOfCounts += group_count(answer)
     return sumOfCounts
