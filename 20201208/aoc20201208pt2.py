@@ -24,7 +24,7 @@ def run_boot_code(boot_code):
             (operation, argument) = read_instruction(instructions[pos])
             (acc, pos) = process_instruction(acc, pos, operation, argument)
         if pos < len(instructions):
-            (instructions, last_switch) = check_switch_instruction(instructions, last_switch)
+            (instructions, last_switch) = switch_next_operation(instructions, last_switch)
     return acc
 
 
@@ -46,20 +46,21 @@ def process_instruction(acc, pos, operation, argument):
     return acc, pos
 
 
-def check_switch_instruction(instructions, old_switch):
-    new_switch = -1
-    if old_switch >= 0:
-        switch_instruction(instructions, old_switch)
-        old_switch += 1
+def switch_next_operation(instructions, last_switch):
+    switched = False
+    next_switch = 0
+    if last_switch >= 0:
+        switch_instruction(instructions, last_switch)
+        last_switch += 1
     else:
-        old_switch = 0
-    while new_switch < 0:
-        switched = switch_instruction(instructions, old_switch)
+        last_switch = 0
+    while not switched:
+        switched = switch_instruction(instructions, last_switch)
         if switched:
-            new_switch = old_switch
+            next_switch = last_switch
         else:
-            old_switch += 1
-    return instructions, new_switch
+            last_switch += 1
+    return instructions, next_switch
 
 
 def switch_instruction(instructions, switch_position):
