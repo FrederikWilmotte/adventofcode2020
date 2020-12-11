@@ -18,11 +18,11 @@ def occupy_seats(seat_layout_old, occupied_seats):
     occupancy_changed = False
     rows = len(seat_layout_old)
     columns = len(seat_layout_old[0])
-    seat_layout_border = [["." for y in range(columns + 2)] for x in range(rows + 2)]
-    seat_layout_new = [["." for y in range(columns)] for x in range(rows)]
+    seat_layout_border = [["." for _ in range(columns + 2)] for _ in range(rows + 2)]
+    seat_layout_new = [["." for _ in range(columns)] for _ in range(rows)]
     for row in range(1, rows + 1):
         for column in range(1, columns + 1):
-            seat_layout_border[row][column] = seat_layout_old[row - 1][column- 1]
+            seat_layout_border[row][column] = seat_layout_old[row - 1][column - 1]
     for row in range(1, rows + 1):
         for column in range(1, columns + 1):
             if seat_layout_border[row][column] == '.':
@@ -44,199 +44,76 @@ def occupy_seats(seat_layout_old, occupied_seats):
     return seat_layout_new, occupancy_changed, occupied_seats
 
 
+def next_seat(seat_layout_border, row, column, direction):
+    seat_found = False
+    seat = "."
+    check_row = row
+    range_row_start = row
+    range_row_end = len(seat_layout_border)
+    range_row_step = 1
+    step_row = 0
+    check_column = column
+    range_column_start = column
+    range_column_end = len(seat_layout_border[0])
+    range_column_step = 1
+    step_column = 0
+    if "N" in direction:
+        check_row = row - 1
+        range_row_end = 0
+        range_row_step = -1
+        step_row = -1
+    if "S" in direction:
+        check_row = row + 1
+        range_row_start = row + 1
+        step_row = 1
+    if "W" in direction:
+        check_column = column - 1
+        range_column_end = 0
+        range_column_step = -1
+        step_column = -1
+    if "E" in direction:
+        check_column = column + 1
+        range_column_start = column + 1
+        step_column = 1
+    while check_row in range(range_row_start, range_row_end, range_row_step) \
+            and check_column in range(range_column_start, range_column_end, range_column_step) and not seat_found:
+        if seat_layout_border[check_row][check_column] == "#" or seat_layout_border[check_row][check_column] == "L":
+            seat_found = True
+            seat = seat_layout_border[check_row][check_column]
+        check_row += step_row
+        check_column += step_column
+    return seat, seat_found
+
+
 def leave_occupied_seat(seat_layout_border, row, column):
     occupied_seats = 0
     leave_seat = False
-    # Check North
-    check_row = row - 1
-    check_column = column
-    keep_searching = True
-    while check_row in range(row, 0, -1) and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
+    directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    while directions and not leave_seat:
+        (seat, seat_found) = next_seat(seat_layout_border, row, column, directions[0])
+        if seat_found and seat == "#":
             occupied_seats += 1
-            keep_searching = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row -= 1
-    # Check South
-    check_row = row + 1
-    check_column = column
-    keep_searching = True
-    while check_row in range(row + 1, len(seat_layout_border)) and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupied_seats += 1
-            keep_searching = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row += 1
-    # Check West
-    check_row = row
-    check_column = column - 1
-    keep_searching = True
-    while check_column in range(column, 0, -1) and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupied_seats += 1
-            keep_searching = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_column -= 1
-    # Check East
-    check_row = row
-    check_column = column + 1
-    keep_searching = True
-    while check_column in range(column + 1, len(seat_layout_border[0])) and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupied_seats += 1
-            keep_searching = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_column += 1
-    # Check North West
-    check_row = row - 1
-    check_column = column - 1
-    keep_searching = True
-    while check_row in range(row, 0, -1) and check_column in range(column, 0, -1) and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupied_seats += 1
-            keep_searching = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row -= 1
-        check_column -= 1
-    # Check North East
-    check_row = row - 1
-    check_column = column + 1
-    keep_searching = True
-    while check_row in range(row, 0, -1) and check_column in range(column + 1, len(seat_layout_border[0])) and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupied_seats += 1
-            keep_searching = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row -= 1
-        check_column += 1
-    # Check South East
-    check_row = row + 1
-    check_column = column + 1
-    keep_searching = True
-    while check_row in range(row + 1, len(seat_layout_border)) and check_column in range(column + 1, len(seat_layout_border[0])) and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupied_seats += 1
-            keep_searching = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row += 1
-        check_column += 1
-    # Check South West
-    check_row = row + 1
-    check_column = column - 1
-    keep_searching = True
-    while check_row in range(row + 1, len(seat_layout_border)) and check_column in range(column, 0, -1) and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupied_seats += 1
-            keep_searching = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row += 1
-        check_column -= 1
-    if occupied_seats >= 5:
-        leave_seat = True
+        if occupied_seats >= 5:
+            leave_seat = True
+        directions.pop(0)
     return leave_seat
 
 
 def occupy_empty_seat(seat_layout_border, row, column):
     occupy_seat = True
-    # Check North
-    check_row = row - 1
-    check_column = column
-    keep_searching = True
-    while check_row in range(row, 0, -1) and occupy_seat and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
+    directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    while directions and occupy_seat:
+        (seat, seat_found) = next_seat(seat_layout_border, row, column, directions[0])
+        if seat_found and seat == "#":
             occupy_seat = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row -= 1
-    # Check South
-    check_row = row + 1
-    check_column = column
-    keep_searching = True
-    while check_row in range(row + 1, len(seat_layout_border)) and occupy_seat and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupy_seat = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row += 1
-    # Check West
-    check_row = row
-    check_column = column - 1
-    keep_searching = True
-    while check_column in range(column, 0, -1) and occupy_seat and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupy_seat = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_column -= 1
-    # Check East
-    check_row = row
-    check_column = column + 1
-    keep_searching = True
-    while check_column in range(column + 1, len(seat_layout_border[0])) and occupy_seat and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupy_seat = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_column += 1
-    # Check North West
-    check_row = row - 1
-    check_column = column - 1
-    keep_searching = True
-    while check_row in range(row, 0, -1) and check_column in range(column, 0, -1) and occupy_seat and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupy_seat = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row -= 1
-        check_column -= 1
-    # Check North East
-    check_row = row - 1
-    check_column = column + 1
-    keep_searching = True
-    while check_row in range(row, 0, -1) and check_column in range(column + 1, len(seat_layout_border[0])) and occupy_seat and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupy_seat = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row -= 1
-        check_column += 1
-    # Check South East
-    check_row = row + 1
-    check_column = column + 1
-    keep_searching = True
-    while check_row in range(row + 1, len(seat_layout_border)) and check_column in range(column + 1, len(seat_layout_border[0])) and occupy_seat and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupy_seat = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row += 1
-        check_column += 1
-    # Check South West
-    check_row = row + 1
-    check_column = column - 1
-    keep_searching = True
-    while check_row in range(row + 1, len(seat_layout_border)) and check_column in range(column, 0, -1) and occupy_seat and keep_searching:
-        if seat_layout_border[check_row][check_column] == "#":
-            occupy_seat = False
-        elif seat_layout_border[check_row][check_column] == "L":
-            keep_searching = False
-        check_row += 1
-        check_column -= 1
+        directions.pop(0)
     return occupy_seat
 
 
 def make_seat_layout_matrix(seat_layout_array):
     rows = len(seat_layout_array)
     columns = len(seat_layout_array[0])
-    seat_layout_matrix = [["." for y in range(columns)] for x in range(rows)]
+    seat_layout_matrix = [["." for _ in range(columns)] for _ in range(rows)]
     for row in range(0, rows):
         for column in range(0, columns):
             seat_layout_matrix[row][column] = seat_layout_array[row][column]
