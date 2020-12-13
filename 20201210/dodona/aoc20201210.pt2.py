@@ -2,8 +2,9 @@
 # Author: Frederik Wilmotte
 # --- Day 10: Adapter Array ---
 # --- Part Two ---
+# Dodona submission
 
-def compute_distinct_connections(joltage_adapters_in_bag):
+def arrangements(joltage_adapters_in_bag):
     adapters = read_joltage_adapters(joltage_adapters_in_bag)
     charging_outlet = 0  # charging outlet
     adapters.append(charging_outlet)
@@ -29,8 +30,3 @@ def read_joltage_adapters(joltage_adapters):
     for adapter_line in adapters_output:
         adapters.append(int(adapter_line.replace("\n", "")))
     return adapters
-
-
-print(compute_distinct_connections("joltage_adapters_test"))
-print(compute_distinct_connections("joltage_adapters_test2"))
-print(compute_distinct_connections("joltage_adapters"))
