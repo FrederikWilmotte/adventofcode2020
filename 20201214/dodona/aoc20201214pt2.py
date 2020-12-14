@@ -2,6 +2,7 @@
 # Author: Frederik Wilmotte
 # --- Day 14: Docking Data ---
 # --- Part Two ---
+# Dodona submission
 
 from itertools import product
 
@@ -59,9 +60,3 @@ def read_program(program_file):
     for program_line in program_output:
         program.append(program_line.replace("\n", ""))
     return program
-
-
-if memory("program_test_pt2") == 208:
-    print(memory("program"))
-else:
-    print(memory("program_test_pt2"))

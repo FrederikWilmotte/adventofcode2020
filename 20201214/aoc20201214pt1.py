@@ -6,7 +6,7 @@
 
 def memory(program_file):
     program = read_program(program_file)
-    mem = [0 for _ in range(100000)]
+    mem = {}
     mask = ""
     sum_values = 0
     for program_line in program:
@@ -19,9 +19,7 @@ def memory(program_file):
             program_line_split[0] = program_line_split[0].replace("mem[", "")
             program_line_split[0] = program_line_split[0].replace("]", "")
             mem[int(program_line_split[0])] = result
-    for values in mem:
-        sum_values += values
-    return sum_values
+    return sum(mem.values())
 
 
 def bitmask(value, mask):
