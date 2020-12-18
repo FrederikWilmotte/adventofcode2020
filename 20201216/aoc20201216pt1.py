@@ -67,4 +67,5 @@ def read_nearby_tickets(ticket_line):
     ticket_numbers = ticket_line.split(",")
     return ticket_numbers
 
+
 print(error_rate("tickets"))
