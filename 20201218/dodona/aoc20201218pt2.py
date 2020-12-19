@@ -1,14 +1,14 @@
 # Advent of Code 2020
 # Author: Frederik Wilmotte
 # --- Day 18: Operation Order ---
-# --- Part One ---
+# --- Part Two ---
+# Dodona submission
 
 def homework(homework_file):
     homework_lines = read_homework_file(homework_file)
     sum_results = 0
     for homework_line in homework_lines:
         result = evaluate(homework_line)
-        print("Result:", result)
         sum_results += result
     return sum_results
 
@@ -24,15 +24,17 @@ def evaluate(homework_line):
 
 
 def calculate_clean_string(expression):
+    result = 1
     expression_split = expression.split()
-    result = int(expression_split[0])
-    while len(expression_split) > 1:
-        if expression_split[1] == "*":
-            result *= int(expression_split[2])
-        elif expression_split[1] == "+":
-            result += int(expression_split[2])
-        expression_split.pop(0)
-        expression_split.pop(1)
+    while "+" in expression_split:
+        index_plus = expression_split.index("+")
+        add = int(expression_split[index_plus - 1]) + int(expression_split[index_plus + 1])
+        expression_split[index_plus - 1] = add
+        expression_split.pop(index_plus)
+        expression_split.pop(index_plus)
+    for element in expression_split:
+        if not element == "*":
+            result *= int(element)
     return result
 
 
@@ -42,6 +44,3 @@ def read_homework_file(homework_file):
     for homework_line in homework_output:
         homework_lines.append(homework_line.replace("\n", ""))
     return homework_lines
-
-
-print(homework('homework_test'))

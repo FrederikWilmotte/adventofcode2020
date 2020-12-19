@@ -2,13 +2,13 @@
 # Author: Frederik Wilmotte
 # --- Day 18: Operation Order ---
 # --- Part One ---
+# Dodona submission
 
 def homework(homework_file):
     homework_lines = read_homework_file(homework_file)
     sum_results = 0
     for homework_line in homework_lines:
         result = evaluate(homework_line)
-        print("Result:", result)
         sum_results += result
     return sum_results
 
@@ -42,6 +42,3 @@ def read_homework_file(homework_file):
     for homework_line in homework_output:
         homework_lines.append(homework_line.replace("\n", ""))
     return homework_lines
-
-
-print(homework('homework_test'))

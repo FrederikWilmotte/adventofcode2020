@@ -1,7 +1,7 @@
 # Advent of Code 2020
 # Author: Frederik Wilmotte
 # --- Day 18: Operation Order ---
-# --- Part One ---
+# --- Part Two ---
 
 def homework(homework_file):
     homework_lines = read_homework_file(homework_file)
@@ -24,15 +24,18 @@ def evaluate(homework_line):
 
 
 def calculate_clean_string(expression):
+    result = 1
     expression_split = expression.split()
-    result = int(expression_split[0])
-    while len(expression_split) > 1:
-        if expression_split[1] == "*":
-            result *= int(expression_split[2])
-        elif expression_split[1] == "+":
-            result += int(expression_split[2])
-        expression_split.pop(0)
-        expression_split.pop(1)
+    print(expression_split)
+    while "+" in expression_split:
+        index_plus = expression_split.index("+")
+        add = int(expression_split[index_plus - 1]) + int(expression_split[index_plus + 1])
+        expression_split[index_plus - 1] = add
+        expression_split.pop(index_plus)
+        expression_split.pop(index_plus)
+    for element in expression_split:
+        if not element == "*":
+            result *= int(element)
     return result
 
 
@@ -44,4 +47,4 @@ def read_homework_file(homework_file):
     return homework_lines
 
 
-print(homework('homework_test'))
+print(homework('homework'))
